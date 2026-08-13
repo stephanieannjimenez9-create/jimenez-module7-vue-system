@@ -21,6 +21,8 @@ const courseCode = ref('')
 const courseName = ref('')
 const schedule = ref('')
 
+const errorMessage = ref('')
+
 watch(
   () => props.registration,
   (value) => {
@@ -30,33 +32,59 @@ watch(
       courseCode.value = value.courseCode
       courseName.value = value.courseName
       schedule.value = value.schedule
+
+      errorMessage.value = ''
     }
   },
   { immediate: true }
 )
 
+/* =========================================
+   SUBMIT REGISTRATION
+   ========================================= */
+
 function submitRegistration() {
-  if (
-    !studentName.value ||
-    !studentId.value ||
-    !courseCode.value ||
-    !courseName.value ||
-    !schedule.value
-  ) {
-    alert('Please complete all fields.')
+  errorMessage.value = ''
+
+  if (!studentName.value.trim()) {
+    errorMessage.value = 'Please enter the student name.'
+    return
+  }
+
+  if (!studentId.value.trim()) {
+    errorMessage.value = 'Please enter the student ID.'
+    return
+  }
+
+  if (!courseCode.value.trim()) {
+    errorMessage.value = 'Please enter the course code.'
+    return
+  }
+
+  if (!courseName.value.trim()) {
+    errorMessage.value = 'Please enter the course name.'
+    return
+  }
+
+  if (!schedule.value.trim()) {
+    errorMessage.value = 'Please enter the course schedule.'
     return
   }
 
   emit('register', {
-    studentName: studentName.value,
-    studentId: studentId.value,
-    courseCode: courseCode.value,
-    courseName: courseName.value,
-    schedule: schedule.value
+    studentName: studentName.value.trim(),
+    studentId: studentId.value.trim(),
+    courseCode: courseCode.value.trim(),
+    courseName: courseName.value.trim(),
+    schedule: schedule.value.trim()
   })
 
   clearForm()
 }
+
+/* =========================================
+   CLEAR FORM
+   ========================================= */
 
 function clearForm() {
   studentName.value = ''
@@ -64,6 +92,8 @@ function clearForm() {
   courseCode.value = ''
   courseName.value = ''
   schedule.value = ''
+
+  errorMessage.value = ''
 }
 </script>
 
@@ -72,17 +102,32 @@ function clearForm() {
 
     <div class="section-title">
       <span>👤</span>
-      <h2>{{ editing ? 'Edit Registration' : 'Register Course' }}</h2>
+
+      <h2>
+        {{ editing ? 'Edit Registration' : 'Register Course' }}
+      </h2>
     </div>
 
     <div class="title-line"></div>
+
+    <!-- VALIDATION MESSAGE -->
+    <div
+      v-if="errorMessage"
+      class="validation-message"
+      role="alert"
+    >
+      ⚠️ {{ errorMessage }}
+    </div>
 
     <form @submit.prevent="submitRegistration">
 
       <div class="form-grid">
 
+        <!-- STUDENT NAME -->
         <div class="form-group">
-          <label>♙ Student Name</label>
+          <label>
+            ♙ Student Name
+          </label>
 
           <input
             v-model="studentName"
@@ -91,8 +136,11 @@ function clearForm() {
           />
         </div>
 
+        <!-- STUDENT ID -->
         <div class="form-group">
-          <label>▣ Student ID</label>
+          <label>
+            ▣ Student ID
+          </label>
 
           <input
             v-model="studentId"
@@ -101,8 +149,11 @@ function clearForm() {
           />
         </div>
 
+        <!-- COURSE CODE -->
         <div class="form-group">
-          <label>&lt;/&gt; Course Code</label>
+          <label>
+            &lt;/&gt; Course Code
+          </label>
 
           <input
             v-model="courseCode"
@@ -111,8 +162,11 @@ function clearForm() {
           />
         </div>
 
+        <!-- COURSE NAME -->
         <div class="form-group">
-          <label>▢ Course Name</label>
+          <label>
+            ▢ Course Name
+          </label>
 
           <input
             v-model="courseName"
@@ -121,8 +175,11 @@ function clearForm() {
           />
         </div>
 
+        <!-- SCHEDULE -->
         <div class="form-group full">
-          <label>◷ Schedule</label>
+          <label>
+            ◷ Schedule
+          </label>
 
           <input
             v-model="schedule"
@@ -133,13 +190,15 @@ function clearForm() {
 
       </div>
 
+      <!-- BUTTONS -->
       <div class="button-group">
 
         <button
           type="submit"
           class="btn btn-primary"
         >
-          ＋ {{ editing ? 'Update Course' : 'Register Course' }}
+          ＋
+          {{ editing ? 'Update Course' : 'Register Course' }}
         </button>
 
         <button
