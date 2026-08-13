@@ -1,7 +1,7 @@
 /* =========================================
    COURSE REGISTRATION SYSTEM
    MAIN DESIGN
-   ========================================= */
+========================================= */
 
 * {
   box-sizing: border-box;
@@ -20,7 +20,7 @@ body {
 
 /* =========================================
    GENERAL
-   ========================================= */
+========================================= */
 
 button,
 input {
@@ -39,14 +39,16 @@ button {
 
 /* =========================================
    HERO / HEADER
-   ========================================= */
+========================================= */
 
 .hero {
   position: relative;
   min-height: 300px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   overflow: hidden;
 
   background: linear-gradient(
@@ -58,6 +60,7 @@ button {
 
   color: white;
   text-align: center;
+
   padding: 50px 30px;
 }
 
@@ -68,9 +71,12 @@ button {
 
 .hero h1 {
   margin: 0;
+
   font-family: Georgia, "Times New Roman", serif;
+
   font-size: clamp(48px, 6vw, 88px);
   font-weight: 800;
+
   letter-spacing: -2px;
   line-height: 1.05;
 }
@@ -91,8 +97,10 @@ button {
 
 .hero-decoration {
   position: absolute;
+
   font-size: 90px;
   opacity: 0.12;
+
   z-index: 1;
 }
 
@@ -106,11 +114,13 @@ button {
 
 /* =========================================
    CARD
-   ========================================= */
+========================================= */
 
 .card {
   background: white;
+
   border-radius: 22px;
+
   padding: 32px;
   margin-bottom: 28px;
 
@@ -126,18 +136,23 @@ button {
 
 /* =========================================
    REGISTER FORM
-   ========================================= */
+========================================= */
 
 .registration-layout {
   display: grid;
+
   grid-template-columns: 1fr 1.3fr;
+
   gap: 28px;
+
   align-items: start;
 }
 
 .form-grid {
   display: grid;
+
   grid-template-columns: 1fr 1fr;
+
   gap: 22px;
 }
 
@@ -148,14 +163,17 @@ button {
 
 .form-group label {
   margin-bottom: 9px;
+
   font-size: 17px;
   font-weight: 700;
+
   color: #263b73;
 }
 
 .form-group input {
   width: 100%;
   height: 58px;
+
   padding: 0 18px;
 
   border: 2px solid #ddd6fe;
@@ -167,13 +185,17 @@ button {
   font-size: 16px;
 
   outline: none;
+
   transition: 0.25s;
 }
 
 .form-group input:focus {
   border-color: #7c3aed;
+
   background: white;
-  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.10);
+
+  box-shadow:
+    0 0 0 4px rgba(124, 58, 237, 0.10);
 }
 
 .form-group input::placeholder {
@@ -182,32 +204,47 @@ button {
 
 /* =========================================
    BUTTONS
-   ========================================= */
+========================================= */
 
 .button-group {
   display: flex;
+
   gap: 12px;
+
   margin-top: 25px;
 }
 
 .btn {
   border: none;
+
   border-radius: 11px;
+
   padding: 14px 25px;
+
   font-size: 16px;
   font-weight: 700;
+
   transition: 0.25s;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #6366f1, #7c3aed);
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #7c3aed
+  );
+
   color: white;
-  box-shadow: 0 6px 15px rgba(99, 102, 241, 0.25);
+
+  box-shadow:
+    0 6px 15px rgba(99, 102, 241, 0.25);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 9px 20px rgba(99, 102, 241, 0.35);
+
+  box-shadow:
+    0 9px 20px rgba(99, 102, 241, 0.35);
 }
 
 .btn-secondary {
@@ -217,12 +254,13 @@ button {
 
 .btn-secondary:hover {
   background: #475569;
+
   transform: translateY(-2px);
 }
 
 /* =========================================
    REGISTERED COURSES
-   ========================================= */
+========================================= */
 
 .right-column {
   width: 100%;
@@ -234,8 +272,11 @@ button {
 
 .section-title {
   display: flex;
+
   align-items: center;
+
   gap: 14px;
+
   margin-bottom: 25px;
 }
 
@@ -244,6 +285,7 @@ button {
   height: 45px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -258,9 +300,11 @@ button {
 
 .section-title h2 {
   flex: 1;
+
   margin: 0;
 
   font-size: 30px;
+
   color: #3730a3;
 }
 
@@ -269,6 +313,7 @@ button {
   height: 50px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -281,16 +326,18 @@ button {
   );
 
   color: white !important;
+
   font-size: 18px;
   font-weight: bold;
 }
 
 /* =========================================
    SEARCH
-   ========================================= */
+========================================= */
 
 .search-box {
   width: 100%;
+
   margin-bottom: 25px;
 }
 
@@ -328,16 +375,19 @@ button {
 
 /* =========================================
    TABLE
-   ========================================= */
+========================================= */
 
 .table-container {
   width: 100%;
+
   overflow-x: auto;
+
   border-radius: 14px;
 }
 
 table {
   width: 100%;
+
   border-collapse: separate;
   border-spacing: 0;
 
@@ -354,6 +404,7 @@ th {
   text-align: left;
 
   color: #3730a3;
+
   font-size: 15px;
   font-weight: 800;
 
@@ -374,20 +425,23 @@ tbody tr {
 
 tbody tr:hover {
   background: #faf8ff;
+
   transform: scale(1.005);
 }
 
 td strong {
   color: #4f46e5;
+
   font-size: 16px;
 }
 
 /* =========================================
    ACTION BUTTONS
-   ========================================= */
+========================================= */
 
 .action-buttons {
   display: flex;
+
   gap: 9px;
 }
 
@@ -411,6 +465,7 @@ td strong {
 
 .edit-btn:hover {
   background: #ddd6fe;
+
   transform: translateY(-3px) scale(1.05);
 }
 
@@ -421,17 +476,19 @@ td strong {
 
 .delete-btn:hover {
   background: #fecaca;
+
   transform: translateY(-3px) scale(1.05);
 }
 
 /* =========================================
    EMPTY STATE
-   ========================================= */
+========================================= */
 
 .empty-state {
   min-height: 180px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -440,17 +497,21 @@ td strong {
   font-size: 18px;
 
   background: #faf9ff;
+
   border-radius: 15px;
 }
 
 /* =========================================
    STATISTICS
-   ========================================= */
+========================================= */
 
 .statistics {
   display: grid;
+
   grid-template-columns: repeat(3, 1fr);
+
   gap: 20px;
+
   margin-top: 25px;
 }
 
@@ -458,7 +519,9 @@ td strong {
   min-height: 145px;
 
   display: flex;
+
   align-items: center;
+
   gap: 20px;
 
   padding: 25px;
@@ -487,6 +550,7 @@ td strong {
   height: 65px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -509,6 +573,7 @@ td strong {
 
 .stat-card span {
   color: #64748b;
+
   font-size: 16px;
 }
 
@@ -526,7 +591,7 @@ td strong {
 
 /* =========================================
    REMINDERS
-   ========================================= */
+========================================= */
 
 .reminders {
   margin-top: 28px;
@@ -534,24 +599,29 @@ td strong {
 
 .reminders h2 {
   margin-top: 0;
+
   font-size: 25px;
+
   color: #3730a3;
 }
 
 .reminders ul {
   margin: 0;
+
   padding-left: 25px;
 }
 
 .reminders li {
   margin: 12px 0;
+
   color: #475569;
+
   font-size: 16px;
 }
 
 /* =========================================
    FOOTER
-   ========================================= */
+========================================= */
 
 footer {
   text-align: center;
@@ -564,8 +634,48 @@ footer {
 }
 
 /* =========================================
+   VALIDATION MESSAGE
+========================================= */
+
+.validation-message {
+  margin-bottom: 20px;
+
+  padding: 14px 18px;
+
+  border: 1px solid #fca5a5;
+
+  border-left: 5px solid #dc2626;
+
+  border-radius: 10px;
+
+  background: #fef2f2;
+
+  color: #b91c1c;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  animation: validationFadeIn 0.25s ease;
+}
+
+@keyframes validationFadeIn {
+  from {
+    opacity: 0;
+
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+/* =========================================
    RESPONSIVE
-   ========================================= */
+========================================= */
 
 @media (max-width: 1000px) {
 
@@ -598,6 +708,7 @@ footer {
 
   .hero {
     min-height: 250px;
+
     padding: 35px 15px;
   }
 
