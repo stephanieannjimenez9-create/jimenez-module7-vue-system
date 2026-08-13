@@ -12,15 +12,27 @@ const props = defineProps({
 
 const emit = defineEmits(['delete', 'edit'])
 
+/* =========================================
+   DELETE
+   ========================================= */
+
 function deleteRegistration(index) {
   if (confirm('Are you sure you want to delete this registration?')) {
     emit('delete', index)
   }
 }
 
+/* =========================================
+   EDIT
+   ========================================= */
+
 function editRegistration(index) {
   emit('edit', index)
 }
+
+/* =========================================
+   SEARCH / FILTER
+   ========================================= */
 
 const filteredRegistrations = computed(() => {
   const search = searchQuery.value.toLowerCase().trim()
@@ -30,9 +42,11 @@ const filteredRegistrations = computed(() => {
   }
 
   return props.registrations.filter((registration) =>
-    registration.courseCode.toLowerCase().includes(search) ||
-    registration.courseName.toLowerCase().includes(search) ||
-    registration.schedule.toLowerCase().includes(search)
+    registration.studentName?.toLowerCase().includes(search) ||
+    registration.studentId?.toLowerCase().includes(search) ||
+    registration.courseCode?.toLowerCase().includes(search) ||
+    registration.courseName?.toLowerCase().includes(search) ||
+    registration.schedule?.toLowerCase().includes(search)
   )
 })
 </script>
@@ -59,7 +73,7 @@ const filteredRegistrations = computed(() => {
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="🔎 Search course..."
+          placeholder="🔎 Search student, ID, course, or schedule..."
         />
       </div>
 
@@ -90,6 +104,8 @@ const filteredRegistrations = computed(() => {
           <thead>
             <tr>
               <th>#</th>
+              <th>Student</th>
+              <th>Student ID</th>
               <th>Course Code</th>
               <th>Course Name</th>
               <th>Schedule</th>
@@ -101,11 +117,19 @@ const filteredRegistrations = computed(() => {
 
             <tr
               v-for="(registration, index) in filteredRegistrations"
-              :key="index"
+              :key="registration.id || index"
             >
 
               <td>
                 {{ index + 1 }}
+              </td>
+
+              <td>
+                {{ registration.studentName }}
+              </td>
+
+              <td>
+                {{ registration.studentId }}
               </td>
 
               <td>
