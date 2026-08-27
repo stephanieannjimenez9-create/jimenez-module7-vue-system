@@ -1,7 +1,71 @@
+```vue
+<template>
+  <div class="registration-list">
+
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Search registrations..."
+        :value="searchQuery"
+        @input="updateSearch"
+      />
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Student ID</th>
+          <th>Course Code</th>
+          <th>Course Name</th>
+          <th>Schedule</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          v-for="registration in filteredRegistrations"
+          :key="registration.id"
+        >
+          <td>{{ registration.studentName }}</td>
+          <td>{{ registration.studentId }}</td>
+          <td>{{ registration.courseCode }}</td>
+          <td>{{ registration.courseName }}</td>
+          <td>{{ registration.schedule }}</td>
+          <td>{{ registration.status }}</td>
+
+          <td>
+            <button
+              type="button"
+              class="edit-btn"
+              @click="editRegistration(registration)"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              class="delete-btn"
+              @click="deleteRegistration(registration)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+
+        <tr v-if="filteredRegistrations.length === 0">
+          <td colspan="7">No registrations found.</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</template>
+
 <script setup>
 import { ref, computed } from 'vue'
-
-const searchQuery = ref('')
 
 const props = defineProps({
   registrations: {
@@ -10,241 +74,45 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['delete', 'edit'])
+const emit = defineEmits(['edit', 'delete'])
 
-/* =========================================
-   DELETE
-   ========================================= */
+const searchQuery = ref('')
 
-function deleteRegistration(index) {
-  if (confirm('Are you sure you want to delete this registration?')) {
-    emit('delete', index)
-  }
+function updateSearch(event) {
+  searchQuery.value = event.target.value
 }
-
-/* =========================================
-   EDIT
-   ========================================= */
-
-function editRegistration(index) {
-  emit('edit', index)
-}
-
-/* =========================================
-   SEARCH / FILTER
-   ========================================= */
 
 const filteredRegistrations = computed(() => {
-  const search = searchQuery.value.toLowerCase().trim()
+  const search = searchQuery.value.trim().toLowerCase()
 
   if (!search) {
     return props.registrations
   }
 
-  return props.registrations.filter((registration) =>
-    registration.studentName?.toLowerCase().includes(search) ||
-    registration.studentId?.toLowerCase().includes(search) ||
-    registration.courseCode?.toLowerCase().includes(search) ||
-    registration.courseName?.toLowerCase().includes(search) ||
-    registration.schedule?.toLowerCase().includes(search)
-  )
+  return props.registrations.filter((registration) => {
+    return (
+      String(registration.studentName || '').toLowerCase().includes(search) ||
+      String(registration.studentId || '').toLowerCase().includes(search) ||
+      String(registration.courseCode || '').toLowerCase().includes(search) ||
+      String(registration.courseName || '').toLowerCase().includes(search) ||
+      String(registration.schedule || '').toLowerCase().includes(search) ||
+      String(registration.status || '').toLowerCase().includes(search)
+    )
+  })
 })
+
+function getOriginalIndex(registration) {
+  return props.registrations.indexOf(registration)
+}
+
+function editRegistration(registration) {
+  emit('edit', getOriginalIndex(registration))
+}
+
+function deleteRegistration(registration) {
+  if (window.confirm('Are you sure you want to delete this registration?')) {
+    emit('delete', getOriginalIndex(registration))
+  }
+}
 </script>
-
-<template>
-  <div class="right-column">
-
-    <!-- REGISTERED COURSES -->
-    <section class="card registration-card">
-
-      <!-- TITLE -->
-      <div class="section-title">
-        <span>☷</span>
-
-        <h2>Registered Courses</h2>
-
-        <span class="count">
-          {{ registrations.length }}
-        </span>
-      </div>
-
-      <!-- SEARCH -->
-      <div class="search-box">
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="🔎 Search student, ID, course, or schedule..."
-        />
-      </div>
-
-      <!-- NO REGISTRATIONS -->
-      <div
-        v-if="registrations.length === 0"
-        class="empty-state"
-      >
-        No course registrations yet.
-      </div>
-
-      <!-- NO SEARCH RESULTS -->
-      <div
-        v-else-if="filteredRegistrations.length === 0"
-        class="empty-state"
-      >
-        No courses found for "{{ searchQuery }}".
-      </div>
-
-      <!-- TABLE -->
-      <div
-        v-else
-        class="table-container"
-      >
-
-        <table>
-
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Student</th>
-              <th>Student ID</th>
-              <th>Course Code</th>
-              <th>Course Name</th>
-              <th>Schedule</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-
-            <tr
-              v-for="(registration, index) in filteredRegistrations"
-              :key="registration.id || index"
-            >
-
-              <td>
-                {{ index + 1 }}
-              </td>
-
-              <td>
-                {{ registration.studentName }}
-              </td>
-
-              <td>
-                {{ registration.studentId }}
-              </td>
-
-              <td>
-                <strong>
-                  {{ registration.courseCode }}
-                </strong>
-              </td>
-
-              <td>
-                {{ registration.courseName }}
-              </td>
-
-              <td>
-                {{ registration.schedule }}
-              </td>
-
-              <td>
-
-                <div class="action-buttons">
-
-                  <!-- EDIT -->
-                  <button
-                    type="button"
-                    class="edit-btn"
-                    @click="editRegistration(index)"
-                    title="Edit registration"
-                  >
-                    ✎
-                  </button>
-
-                  <!-- DELETE -->
-                  <button
-                    type="button"
-                    class="delete-btn"
-                    @click="deleteRegistration(index)"
-                    title="Delete registration"
-                  >
-                    🗑
-                  </button>
-
-                </div>
-
-              </td>
-
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </section>
-
-    <!-- STATISTICS -->
-    <div class="statistics">
-
-      <!-- TOTAL COURSES -->
-      <div class="stat-card blue">
-
-        <div class="stat-icon">
-          📋
-        </div>
-
-        <div>
-          <strong>
-            {{ registrations.length }}
-          </strong>
-
-          <span>
-            Total Courses
-          </span>
-        </div>
-
-      </div>
-
-      <!-- TOTAL UNITS -->
-      <div class="stat-card green">
-
-        <div class="stat-icon">
-          ✓
-        </div>
-
-        <div>
-          <strong>
-            {{ registrations.length * 3 }}
-          </strong>
-
-          <span>
-            Total Units
-          </span>
-        </div>
-
-      </div>
-
-      <!-- CURRENT TERM -->
-      <div class="stat-card purple">
-
-        <div class="stat-icon">
-          📅
-        </div>
-
-        <div>
-          <strong>
-            AY 2026-2027
-          </strong>
-
-          <span>
-            Current Term
-          </span>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-</template>
+```
