@@ -1,4 +1,4 @@
-```vue
+vue
 <template>
   <div class="registration-list">
 
@@ -115,4 +115,4 @@ function deleteRegistration(registration) {
   }
 }
 </script>
-```
+
