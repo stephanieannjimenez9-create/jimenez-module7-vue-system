@@ -1,11 +1,10 @@
-
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 
 import RegistrationForm from '../src/components/RegistrationForm.vue'
 import RegistrationList from '../src/components/RegistrationList.vue'
 
-describe('Module 7 Course Registration System - Module 8 Testing', () => {
+describe('Module 7 Course Registration System - Module 9 Testing', () => {
   const sampleRegistration = {
     id: 1,
     studentName: 'Stephanie Jimenez',
@@ -13,7 +12,7 @@ describe('Module 7 Course Registration System - Module 8 Testing', () => {
     courseCode: 'CS301',
     courseName: 'Software Engineering',
     schedule: 'Monday 8:00 AM - 10:00 AM',
-    status: 'Registered'
+    status: 'Active'
   }
 
   const registrations = [
@@ -25,7 +24,20 @@ describe('Module 7 Course Registration System - Module 8 Testing', () => {
       courseCode: 'CS302',
       courseName: 'Web Development',
       schedule: 'Tuesday 10:00 AM - 12:00 PM',
-      status: 'Registered'
+      status: 'Active'
+    }
+  ]
+
+  const statusRegistrations = [
+    sampleRegistration,
+    {
+      id: 2,
+      studentName: 'Juan Dela Cruz',
+      studentId: '2026-002',
+      courseCode: 'CS302',
+      courseName: 'Web Development',
+      schedule: 'Tuesday 10:00 AM - 12:00 PM',
+      status: 'Inactive'
     }
   ]
 
@@ -140,5 +152,44 @@ describe('Module 7 Course Registration System - Module 8 Testing', () => {
 
     wrapper.unmount()
   })
-})
 
+  it('should filter registrations by Active status', async () => {
+    const wrapper = mount(RegistrationList, {
+      props: {
+        registrations: statusRegistrations
+      }
+    })
+
+    const statusFilter = wrapper.find('.status-filter')
+
+    await statusFilter.setValue('Active')
+
+    expect(wrapper.vm.filteredRegistrations).toHaveLength(1)
+    expect(wrapper.vm.filteredRegistrations[0].status).toBe('Active')
+    expect(wrapper.vm.filteredRegistrations[0].studentName).toBe(
+      'Stephanie Jimenez'
+    )
+
+    wrapper.unmount()
+  })
+
+  it('should filter registrations by Inactive status', async () => {
+    const wrapper = mount(RegistrationList, {
+      props: {
+        registrations: statusRegistrations
+      }
+    })
+
+    const statusFilter = wrapper.find('.status-filter')
+
+    await statusFilter.setValue('Inactive')
+
+    expect(wrapper.vm.filteredRegistrations).toHaveLength(1)
+    expect(wrapper.vm.filteredRegistrations[0].status).toBe('Inactive')
+    expect(wrapper.vm.filteredRegistrations[0].studentName).toBe(
+      'Juan Dela Cruz'
+    )
+
+    wrapper.unmount()
+  })
+})

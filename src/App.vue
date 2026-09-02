@@ -5,27 +5,24 @@ import AppHeader from './components/AppHeader.vue'
 import RegistrationForm from './components/RegistrationForm.vue'
 import RegistrationList from './components/RegistrationList.vue'
 
-/* =========================================
-   REGISTRATIONS
-   ========================================= */
-
 const registrations = ref([])
-
-/* =========================================
-   LOAD DATA FROM LOCALSTORAGE
-   ========================================= */
 
 onMounted(() => {
   const saved = localStorage.getItem('module7-records')
 
   registrations.value = saved
-    ? JSON.parse(saved)
+    ? JSON.parse(saved).map((registration) => ({
+        ...registration,
+        status:
+          registration.status === 'Active' ||
+          registration.status === 'Inactive'
+            ? registration.status
+            : 'Active'
+      }))
     : []
-})
 
-/* =========================================
-   SAVE DATA TO LOCALSTORAGE
-   ========================================= */
+  saveRegistrations()
+})
 
 function saveRegistrations() {
   localStorage.setItem(
@@ -34,15 +31,11 @@ function saveRegistrations() {
   )
 }
 
-/* =========================================
-   CREATE / ADD
-   ========================================= */
-
 function addRegistration(registration) {
   registrations.value.push({
     id: Date.now(),
     ...registration,
-    status: 'Registered'
+    status: 'Active'
   })
 
   saveRegistrations()
@@ -50,19 +43,11 @@ function addRegistration(registration) {
   alert('Course registration added successfully!')
 }
 
-/* =========================================
-   DELETE
-   ========================================= */
-
 function deleteRegistration(index) {
   registrations.value.splice(index, 1)
 
   saveRegistrations()
 }
-
-/* =========================================
-   EDIT / UPDATE
-   ========================================= */
 
 function editRegistration(index) {
   const registration = registrations.value[index]
@@ -102,8 +87,6 @@ function editRegistration(index) {
 
   if (schedule === null) return
 
-  /* VALIDATION */
-
   if (
     !studentName.trim() ||
     !studentId.trim() ||
@@ -112,11 +95,8 @@ function editRegistration(index) {
     !schedule.trim()
   ) {
     alert('Please complete all required fields.')
-
     return
   }
-
-  /* UPDATE RECORD */
 
   registrations.value[index] = {
     ...registration,
@@ -132,10 +112,6 @@ function editRegistration(index) {
   alert('Registration updated successfully!')
 }
 
-/* =========================================
-   STATISTICS
-   ========================================= */
-
 const totalCourses = computed(() => {
   return registrations.value.length
 })
@@ -147,37 +123,28 @@ const totalUnits = computed(() => {
 
 <template>
   <div class="app">
-
-    <!-- HEADER -->
     <AppHeader />
 
-    <!-- MAIN CONTENT -->
     <main class="container">
 
-      <!-- REGISTRATION FORM -->
       <RegistrationForm
         @register="addRegistration"
       />
 
-      <!-- REGISTERED COURSES -->
       <RegistrationList
         :registrations="registrations"
         @delete="deleteRegistration"
         @edit="editRegistration"
       />
 
-      <!-- STATISTICS -->
       <section class="stats-grid">
 
-        <!-- TOTAL COURSES -->
         <div class="stat-card">
-
           <div class="stat-icon">
             📋
           </div>
 
           <div class="stat-info">
-
             <div class="stat-number">
               {{ totalCourses }}
             </div>
@@ -185,20 +152,15 @@ const totalUnits = computed(() => {
             <div class="stat-label">
               Total Courses
             </div>
-
           </div>
-
         </div>
 
-        <!-- TOTAL UNITS -->
         <div class="stat-card">
-
           <div class="stat-icon">
             ✓
           </div>
 
           <div class="stat-info">
-
             <div class="stat-number">
               {{ totalUnits }}
             </div>
@@ -206,20 +168,15 @@ const totalUnits = computed(() => {
             <div class="stat-label">
               Total Units
             </div>
-
           </div>
-
         </div>
 
-        <!-- CURRENT TERM -->
         <div class="stat-card">
-
           <div class="stat-icon">
             📅
           </div>
 
           <div class="stat-info">
-
             <div class="stat-term">
               AY 2026-2027
             </div>
@@ -227,14 +184,11 @@ const totalUnits = computed(() => {
             <div class="stat-label">
               Current Term
             </div>
-
           </div>
-
         </div>
 
       </section>
 
-      <!-- REMINDERS -->
       <section class="reminders">
 
         <h3>
@@ -242,7 +196,6 @@ const totalUnits = computed(() => {
         </h3>
 
         <ul>
-
           <li>
             Check your schedule for conflicts before registering.
           </li>
@@ -254,14 +207,12 @@ const totalUnits = computed(() => {
           <li>
             Contact the registrar for any concerns.
           </li>
-
         </ul>
 
       </section>
 
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer">
 
       <p>
