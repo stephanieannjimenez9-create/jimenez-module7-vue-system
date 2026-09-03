@@ -19,6 +19,9 @@ https://github.com/stephanieannjimenez9-create/jimenez-module6-architecture
 Module 7 Repository:
 https://github.com/stephanieannjimenez9-create/jimenez-module7-vue-system
 
+Module 9 Branch:
+https://github.com/stephanieannjimenez9-create/jimenez-module7-vue-system/tree/module9/software-evolution
+
 
 1. PROJECT DESCRIPTION
 
@@ -26,7 +29,7 @@ The Student Course Registration System is a frontend prototype developed for Sof
 
 This project implements the Course Registration entity from the system architecture proposed in Module 6.
 
-The system allows users to create, view, edit, delete, and search course registration records. It also provides form validation, browser localStorage persistence, feedback, record summaries, and a responsive interface.
+The system allows users to log in, create, view, edit, delete, and search course registration records. It also provides form validation, browser localStorage persistence, Active/Inactive status filtering, feedback, record summaries, and a responsive interface.
 
 The project is a frontend prototype. The backend, API, and database components proposed in Module 6 remain future components.
 
@@ -71,7 +74,7 @@ https://github.com/stephanieannjimenez9-create/jimenez-module6-architecture
 
 3. IMPLEMENTED FEATURES
 
-The application implements the required Module 7 functions.
+The application implements the required Module 7 functions and the Module 9 software evolution changes.
 
 Create
 
@@ -91,7 +94,7 @@ Users can delete a registration after confirming the deletion.
 
 Search
 
-Users can search and filter registered course records.
+Users can search registered course records using the search field.
 
 Validation
 
@@ -100,6 +103,14 @@ Required fields are checked before a registration can be submitted.
 Persistence
 
 Course registration records are saved in browser localStorage so they remain available after refreshing the page.
+
+Status Filtering
+
+Users can filter registration records by All, Active, or Inactive status.
+
+Institutional Login
+
+Users must successfully log in using the demonstration institutional account before accessing the main Course Registration System.
 
 Responsive Interface
 
@@ -133,6 +144,8 @@ Status                 Current registration status
 - Git
 - GitHub
 - GitHub Actions
+- Vitest
+- Vue Test Utils
 - Visual Studio Code
 
 
@@ -143,6 +156,7 @@ The project uses reusable Vue components.
 src/
     components/
         AppHeader.vue
+        LoginForm.vue
         RegistrationForm.vue
         RegistrationList.vue
     App.vue
@@ -153,23 +167,28 @@ AppHeader.vue
 
 Contains the application header, system title, and system description.
 
+LoginForm.vue
+
+Provides the institutional login interface and validates the demonstration login credentials.
+
 RegistrationForm.vue
 
 Contains the course registration form and handles user input and validation.
 
 RegistrationList.vue
 
-Displays registered courses and provides edit and delete actions.
+Displays registered courses and provides search, status filtering, edit, and delete actions.
 
 App.vue
 
-Controls the main application state and connects the Vue components.
+Controls the main application state, login state, localStorage data, and connects the Vue components.
 
 
 7. INTERFACE SECTIONS
 
 The application contains the following interface sections:
 
+- Institutional login screen
 - Application header
 - System title and description
 - Course registration form
@@ -193,6 +212,10 @@ Course registration records are stored in the browser using the key:
 module7-records
 
 The saved records remain available after the browser page is refreshed.
+
+Existing records without a valid Active or Inactive status are assigned Active status when loaded.
+
+New course registrations are assigned Active status by default.
 
 localStorage is used because Module 7 only requires a frontend prototype. A production version can later replace localStorage with a backend API and database.
 
@@ -232,6 +255,18 @@ The port may be different if another Vite server is already running.
 
 Open the displayed localhost address in a web browser.
 
+Run Automated Tests
+
+Run:
+
+npm run test:run
+
+Build the Application
+
+Run:
+
+npm run build
+
 
 10. PRODUCTION BUILD
 
@@ -239,14 +274,13 @@ To verify that the application can be built successfully, run:
 
 npm run build
 
-A successful build indicates that the Vue application can be compiled for production.
-
 The Module 9 production build was successfully completed.
 
 Build Result:
 
-16 modules transformed
-Production build passed
+18 modules transformed
+
+Production build passed successfully.
 
 
 11. GIT AND GITHUB
@@ -257,7 +291,28 @@ Module 7 Repository:
 
 https://github.com/stephanieannjimenez9-create/jimenez-module7-vue-system
 
+Module 9 Branch:
+
+https://github.com/stephanieannjimenez9-create/jimenez-module7-vue-system/tree/module9/software-evolution
+
 The project uses meaningful commit messages to document development progress.
+
+Important Module 9 commits include:
+
+1873c82
+Add Active Inactive status filter
+
+2d6c133
+Update README for Module 9
+
+74dcba1
+Update GitHub Actions for Module 9
+
+8de604d
+feat: implement institutional login
+
+38a234e
+test: update regression tests for evolved version
 
 
 12. GITHUB ACTIONS
@@ -277,6 +332,22 @@ npm run build
 
 The purpose of the workflow is to verify that the Vue application can successfully build when changes are pushed to GitHub.
 
+Latest Workflow:
+
+Vue Build Check #9
+
+Latest Commit:
+
+38a234e
+
+Branch:
+
+module9/software-evolution
+
+Status:
+
+Successful
+
 
 13. TESTING CHECKLIST
 
@@ -284,7 +355,7 @@ Test                              Expected Result
 
 Add a complete record             Record appears successfully
 
-Submit an incomplete form         Submission is prevented
+Submit an incomplete form         Submission is prevented and a validation message appears
 
 Add multiple records              All records are displayed
 
@@ -296,78 +367,238 @@ Confirm deletion                  Selected record is removed
 
 Search an existing value          Matching record is displayed
 
-Search a missing value            Empty-state message appears
+Search a missing value            No matching record is displayed
 
 Refresh the browser               Saved records remain available
-
-Resize the browser                Interface remains usable
 
 Filter Active status              Active registrations are displayed
 
 Filter Inactive status            Inactive registrations are displayed
+
+Login validation                  Valid login is accepted and invalid or blank credentials are rejected
+
+Responsive interface              Interface remains usable on smaller screen sizes
 
 
 14. MODULE 9 – SOFTWARE EVOLUTION
 
 Module 9 focuses on software evolution and maintenance of the Student Course Registration System developed in Module 7.
 
-The existing system was retained and improved through a software change involving registration status filtering.
+The existing system was retained and improved through Perfective Maintenance.
+
+The main improvements are the addition of an institutional login feature and an Active/Inactive status filter for course registration records.
+
+Version:
+
+1.1.0
+
+Maintenance Type:
+
+Perfective Maintenance
 
 
-Software Change
+15. CHANGE REQUEST – CR-M9-01
 
-The system was enhanced with an Active/Inactive status filter for course registration records.
+Change Request Title:
 
-Users can select:
+Add Institutional Login and Active/Inactive Record Filter
+
+Problem:
+
+The existing Course Registration System could manage, search, and store course registration records, but it did not have an institutional login gate or a direct way to filter records according to their Active or Inactive status.
+
+Desired Outcome:
+
+The system should provide an institutional login before users can access the Course Registration System and should allow users to filter registration records by All, Active, or Inactive status while preserving the existing CRUD operations, search, validation, delete confirmation, localStorage persistence, and responsive interface.
+
+Acceptance Criteria:
+
+1. Users can successfully log in using the valid institutional account.
+
+2. Invalid or incomplete login credentials are rejected and an appropriate error or validation message is displayed.
+
+3. Users can select All, Active, or Inactive from the registration status filter.
+
+4. Selecting Active displays only records with Active status.
+
+5. Selecting Inactive displays only records with Inactive status.
+
+6. Existing Create, Read, Update, Delete, Search, Validation, Delete Confirmation, Persistence, and Responsive features continue to work.
+
+7. Existing records without a valid Active or Inactive status are safely assigned Active status when loaded.
+
+Priority:
+
+Medium
+
+Rationale:
+
+The change improves the usability, organization, and access control of the Course Registration System while keeping the existing system functionality.
+
+Affected Areas:
+
+- Architecture
+- User Interface
+- Application Logic
+- localStorage Data Handling
+- Automated Tests
+- GitHub Actions
+- Documentation
+
+
+16. IMPACT ANALYSIS
+
+Architecture Impact:
+
+The software evolution introduces a LoginForm component and updates the application flow so that users must log in before accessing the registration system. The existing registration components and localStorage data flow remain in use.
+
+UI Impact:
+
+A new institutional login interface was added. The registration interface was preserved, including the registration form, search field, status filter, registration table, buttons, summaries, and responsive layout.
+
+Logic Impact:
+
+Login validation was added to control access to the main application. The existing Active/Inactive filtering logic remains available for registration records.
+
+Data and localStorage Impact:
+
+The system continues to use the existing localStorage key:
+
+module7-records
+
+Existing records with an unsupported or missing status are assigned Active status when loaded. New registrations are also assigned Active status by default.
+
+Testing Impact:
+
+Two additional automated tests were added for the Login feature:
+
+- Valid institutional login
+- Invalid institutional login
+
+The existing regression tests were retained.
+
+CI Impact:
+
+GitHub Actions continues to verify that the evolved Vue application can successfully build after changes are pushed to GitHub.
+
+Documentation Impact:
+
+The README, release information, testing results, and Module 9 report were updated to document the evolved version.
+
+
+17. DESIGN AND IMPLEMENTATION
+
+The evolved system contains the following main components:
+
+src/
+    components/
+        AppHeader.vue
+        LoginForm.vue
+        RegistrationForm.vue
+        RegistrationList.vue
+    App.vue
+    main.js
+    style.css
+
+LoginForm.vue
+
+Provides the institutional login interface and validates the predefined demonstration credentials.
+
+App.vue
+
+Controls the login state and displays the main Course Registration System only after successful login.
+
+RegistrationForm.vue
+
+Continues to handle course registration input and required-field validation.
+
+RegistrationList.vue
+
+Continues to display registration records and provides search, Active/Inactive filtering, edit, and delete functionality.
+
+The software evolution was implemented without removing the existing registration features.
+
+The final system preserves:
+
+- Create
+- Read
+- Update
+- Delete
+- Search
+- Form Validation
+- Delete Confirmation
+- localStorage Persistence
+- Active/Inactive Filtering
+- Responsive Interface
+
+
+18. LOGIN FEATURE
+
+The evolved version includes an institutional login screen.
+
+The login uses predefined demonstration credentials for academic testing.
+
+Institutional Email:
+
+stephanie.jimenez@school.edu
+
+Password:
+
+student123
+
+Successful login displays the Student Course Registration System.
+
+Invalid credentials are rejected with the message:
+
+Invalid institutional account or password.
+
+Blank login fields are also prevented from accessing the system.
+
+Limitation:
+
+The login is a demonstration authentication feature. It is not connected to a real school authentication server, database, or production identity system.
+
+
+19. ACTIVE / INACTIVE STATUS FILTER
+
+The system includes a status filter for course registration records.
+
+Available options:
 
 - All
 - Active
 - Inactive
 
-The filter allows users to view registration records based on their current status.
+Active:
+
+Displays only registration records with Active status.
+
+Inactive:
+
+Displays only registration records with Inactive status.
+
+All:
+
+Displays all registration records.
+
+New registrations are assigned Active status by default.
+
+Older records without a valid status are safely assigned Active status when loaded.
 
 
-Maintenance Type
-
-The change represents Perfective Maintenance because the existing system was improved by adding a useful filtering function without changing the main purpose of the application.
-
-
-Five Tested Features
-
-1. Add Record
-
-Validates complete registration information and adds a new record.
-
-2. Display Records
-
-Displays saved course registration records.
-
-3. Edit Record
-
-Allows an existing registration to be updated.
-
-4. Delete Record
-
-Removes a selected registration after confirmation.
-
-5. Search / Status Filtering
-
-Searches registration records and filters them by Active or Inactive status.
-
-
-15. AUTOMATED UNIT TESTING
+20. AUTOMATED UNIT TESTING
 
 Vitest was used to perform automated unit testing.
 
-The existing Module 8 tests were retained and additional tests were added for the Active and Inactive status filters.
+The existing regression tests were retained and additional tests were added for the Login feature.
 
 Final Automated Test Result:
 
 Test Files: 1 passed
-Tests: 7 passed
+Tests: 9 passed
 Failed: 0
 
-The seven automated tests cover:
+The nine automated tests cover:
 
 1. Complete registration validation
 2. Displaying registered courses
@@ -376,130 +607,364 @@ The seven automated tests cover:
 5. Searching registrations
 6. Filtering Active registrations
 7. Filtering Inactive registrations
+8. Valid institutional login
+9. Invalid institutional login
 
-Overall automated testing result:
+Overall Automated Testing Result:
 
-7 Passed
+9 Passed
 0 Failed
 
-
-16. MANUAL TEST CASES
-
-Test Case    Feature                    Type       Expected Result                                      Actual Result
-
-TC01         Add Record                 Positive   Valid registration details are accepted and          Passed
-                                                   a new record is added.
-
-TC02         Add Record                 Negative   Missing required student information is rejected.    Passed
-
-TC03         Display Records            Positive   A saved course registration appears in the           Passed
-                                                   records list.
-
-TC04         Display Records            Edge       No matching or empty records are handled            Passed
-                                                   without errors.
-
-TC05         Edit Record                Positive   The selected course registration is updated          Passed
-                                                   successfully.
-
-TC06         Edit Record                Negative   Invalid or empty required data is rejected           Passed
-                                                   during editing.
-
-TC07         Delete Record              Positive   The selected course registration is deleted           Passed
-                                                   after confirmation.
-
-TC08         Delete Record              Edge       Cancelling deletion leaves the selected              Passed
-                                                   registration unchanged.
-
-TC09         Search / Validation         Positive   An existing student name or course code is          Passed
-                                                   found successfully.
-
-TC10         Search / Validation         Edge       A search with no matching registration displays     Passed
-                                                   "No registrations found."
-
-TC11         Active/Inactive Filter      Positive   Selecting Active displays registrations with        Passed
-                                                   Active status.
-
-TC12         Active/Inactive Filter      Positive   Selecting Inactive displays registrations with      Passed
-                                                   Inactive status, or shows "No registrations found."
-                                                   when there are no matching records.
+The final regression test confirms that the new login feature and status filtering did not break the existing tested registration functions.
 
 
-17. DEFECT REPORT
+21. MANUAL TEST CASES
 
-Defect Description
+A total of 12 manual test cases were completed for the final evolved version.
 
-During the software evolution process, the status filtering feature needed to be supported by the registration data and automated tests.
+TC01 – Add Complete Registration
 
-The existing system used the status value "Registered", while the new status filter required Active and Inactive status values.
+Type:
+Positive
 
-Expected Behavior
+Expected Result:
+Complete registration details are accepted and a new record is added.
 
-Registration records should use Active or Inactive status so that the status filter can identify and display the correct records.
+Actual Result:
+Registration was added successfully.
 
-Actual Behavior
+Status:
+PASS
 
-Existing records could contain the previous Registered status, which was not directly compatible with the new Active/Inactive filtering requirement.
+
+TC02 – Incomplete Form Validation
+
+Type:
+Negative
+
+Expected Result:
+Missing required information is rejected and a validation message is displayed.
+
+Actual Result:
+Validation message was displayed.
+
+Status:
+PASS
 
 
-18. DEFECT CORRECTION
+TC03 – Display Multiple Records
 
-The defect was corrected by updating the application status handling.
+Type:
+Positive
 
-Existing records with the previous Registered status are converted to Active when loaded.
+Expected Result:
+Multiple registered records are displayed correctly.
+
+Actual Result:
+Multiple records were displayed.
+
+Status:
+PASS
+
+
+TC04 – Edit Registration
+
+Type:
+Positive
+
+Expected Result:
+The selected registration can be updated successfully.
+
+Actual Result:
+Registration was updated successfully.
+
+Status:
+PASS
+
+
+TC05 – Cancel Delete
+
+Type:
+Negative
+
+Expected Result:
+Cancelling the delete confirmation keeps the selected record.
+
+Actual Result:
+Record remained in the table.
+
+Status:
+PASS
+
+
+TC06 – Confirm Delete
+
+Type:
+Positive
+
+Expected Result:
+Confirming deletion removes the selected record.
+
+Actual Result:
+Record was successfully removed.
+
+Status:
+PASS
+
+
+TC07 – Search Existing Record
+
+Type:
+Positive
+
+Expected Result:
+An existing student name or course information is found.
+
+Actual Result:
+Matching record was displayed.
+
+Status:
+PASS
+
+
+TC08 – Search Missing Record
+
+Type:
+Negative
+
+Expected Result:
+A search with no matching record displays no matching registrations.
+
+Actual Result:
+No matching record was displayed.
+
+Status:
+PASS
+
+
+TC09 – Data Persistence
+
+Type:
+Positive
+
+Expected Result:
+Registered data remains available after refreshing the page.
+
+Actual Result:
+Records remained after refresh.
+
+Status:
+PASS
+
+
+TC10 – Active/Inactive Status Filter
+
+Type:
+Positive
+
+Expected Result:
+Selecting Active or Inactive displays only records matching the selected status.
+
+Actual Result:
+Active and Inactive filtering worked correctly.
+
+Status:
+PASS
+
+
+TC11 – Responsive / Mobile View
+
+Type:
+Positive
+
+Expected Result:
+The interface remains usable on smaller screen sizes.
+
+Actual Result:
+The system remained usable in mobile view.
+
+Status:
+PASS
+
+
+TC12 – Login Validation
+
+Type:
+Positive/Negative
+
+Expected Result:
+Valid institutional credentials allow access, while invalid or blank credentials are rejected.
+
+Actual Result:
+Valid login succeeded and invalid or blank credentials were prevented.
+
+Status:
+PASS
+
+
+Manual Testing Summary:
+
+Total Test Cases: 12
+Passed: 12
+Failed: 0
+
+
+22. DEFECT REPORT AND CORRECTION
+
+Defect Description:
+
+During the software evolution process, the new status filtering feature required registration records to use Active or Inactive status values.
+
+The previous version could contain records using the status value:
+
+Registered
+
+This value was not directly compatible with the new Active/Inactive filtering requirement.
+
+Expected Behavior:
+
+Registration records should use Active or Inactive status so that the status filter can correctly identify and display records.
+
+Actual Behavior:
+
+Existing records could contain the previous Registered status, which could prevent them from being correctly categorized by the new status filter.
+
+Defect Correction:
+
+The application was updated so that existing records with an unsupported status are converted to Active when loaded.
 
 New course registrations are assigned Active status by default.
 
-The RegistrationList component supports the status filtering functionality.
+The RegistrationList component supports Active and Inactive filtering.
 
-The automated tests were also updated to test both Active and Inactive status filtering.
-
-
-19. RETESTING RESULT
-
-After the correction was made, the automated tests were executed again using Vitest.
-
-Final result:
-
-Test Files: 1 passed
-Tests: 7 passed
-Failed: 0
-
-The Active and Inactive filtering tests passed successfully.
+Automated tests were updated to verify both Active and Inactive filtering.
 
 
-20. REGRESSION TESTING
+23. RELEASE NOTES – VERSION 1.1.0
 
-Regression testing was performed after the software change.
+Version:
 
-The existing Module 8 tests were retained and executed together with the new Module 9 tests.
+1.1.0
 
-All seven automated tests passed.
+Maintenance Type:
 
-This confirms that the new status filtering functionality did not break the existing registration, display, edit, delete, and search features.
+Perfective Maintenance
 
-Regression Result:
+Release Summary:
 
-Passed
+The Student Course Registration System was improved to provide a more organized and accessible registration experience.
+
+Added:
+
+- Institutional login screen
+- Institutional login validation
+- Active/Inactive status filter
+- All status filter option
+- Automated login tests
+
+Preserved:
+
+- Create registration
+- Display registration records
+- Edit registration
+- Delete registration
+- Delete confirmation
+- Search
+- Form validation
+- localStorage persistence
+- Responsive interface
+
+Testing:
+
+12 manual test cases completed.
+
+12 manual test cases passed.
+
+9 automated Vitest tests passed.
+
+Production build passed successfully.
+
+GitHub Actions build verification passed successfully.
+
+Compatibility:
+
+Older localStorage records without a valid Active or Inactive status are assigned Active status when loaded.
+
+Known Limitation:
+
+The institutional login is currently a demonstration authentication feature and is not connected to a real school authentication system.
 
 
-21. GIT BRANCH AND COMMIT
+24. PRODUCTION BUILD AND CI RESULTS
 
-The Module 9 changes were developed using the following branch:
+Production Build:
+
+The evolved application was successfully built using:
+
+npm run build
+
+Final Build Result:
+
+18 modules transformed
+
+Production build completed successfully.
+
+GitHub Actions:
+
+Workflow Name:
+
+Vue Build Check
+
+Latest Workflow:
+
+Vue Build Check #9
+
+Latest Commit:
+
+38a234e
+
+Branch:
 
 module9/software-evolution
 
-The changes were committed using:
+Status:
 
-Add Active Inactive status filter
+Successful
 
-Commit ID:
+The successful GitHub Actions workflow confirms that the evolved Vue application can successfully complete the configured build process.
+
+
+25. GIT BRANCH, COMMITS, AND VERSION CONTROL
+
+The Module 9 software evolution changes were developed using:
+
+module9/software-evolution
+
+Important Module 9 commits include:
 
 1873c82
+Add Active Inactive status filter
 
-The changes were successfully pushed to GitHub.
+2d6c133
+Update README for Module 9
+
+74dcba1
+Update GitHub Actions for Module 9
+
+8de604d
+feat: implement institutional login
+
+38a234e
+test: update regression tests for evolved version
+
+The latest Module 9 changes were successfully pushed to the public GitHub repository.
+
+Module 9 Branch:
+
+https://github.com/stephanieannjimenez9-create/jimenez-module7-vue-system/tree/module9/software-evolution
 
 
-22. GITHUB REPOSITORY
+26. GITHUB REPOSITORY AND EVIDENCE
 
 Public GitHub Repository:
 
@@ -507,45 +972,54 @@ https://github.com/stephanieannjimenez9-create/jimenez-module7-vue-system
 
 Module 9 Branch:
 
-module9/software-evolution
+https://github.com/stephanieannjimenez9-create/jimenez-module7-vue-system/tree/module9/software-evolution
+
+Required Evidence Screenshots:
+
+M9-01_Previous_Architecture.png
+
+Module 6 architecture baseline used as the previous architecture reference.
+
+M9-02_Existing_System.png
+
+Module 7 working system before the Module 9 software evolution.
+
+M9-03_Module8_Test_Baseline.png
+
+Module 8 testing and build baseline.
+
+M9-04_Change_Request.png
+
+CR-M9-01 change request, problem, desired outcome, and acceptance criteria.
+
+M9-05_Updated_Architecture.png
+
+Updated architecture showing the affected components and data flow.
+
+M9-06_Implementation.png
+
+Relevant implementation code or Git diff showing the software evolution changes.
+
+M9-07_Evolved_System.png
+
+Working evolved system showing the implemented changes.
+
+M9-08_Updated_Test_Cases.png
+
+Final manual test cases and results.
+
+M9-09_Test_Build_Results.png
+
+Final automated test and production build results.
+
+M9-10_GitHub_Actions.png
+
+Successful GitHub Actions workflow and GitHub commit evidence.
 
 
-23. EVIDENCE SCREENSHOTS
+27. LIMITATIONS, FUTURE IMPROVEMENTS, AND AUTHOR
 
-The final Module 9 report will contain the required screenshots M9-01 to M9-10.
-
-M9-01
-Existing Module 7 application running in the browser.
-
-M9-02
-Updated architecture showing the evolved system.
-
-M9-03
-Updated application showing the implemented software change.
-
-M9-04
-Updated source code related to the software evolution change.
-
-M9-05
-Automated tests showing the existing tests.
-
-M9-06
-Automated tests showing the added Active and Inactive filter tests.
-
-M9-07
-Updated manual test cases.
-
-M9-08
-Testing and build evidence.
-
-M9-09
-Final automated testing and regression result.
-
-M9-10
-GitHub Actions successful CI and GitHub commit evidence.
-
-
-24. LIMITATIONS
+Limitations:
 
 This project is a frontend prototype developed for academic purposes.
 
@@ -554,20 +1028,23 @@ The current version does not include:
 - Production backend
 - REST API
 - MySQL or MongoDB database
-- User authentication
+- Real school authentication server
+- Server-side authentication
 - Server-side data storage
 - Multi-user access
 
+The institutional login is currently a demonstration login using predefined credentials.
+
 Browser localStorage is used instead of a production database.
 
-
-25. FUTURE IMPROVEMENTS
+Future Improvements:
 
 Future versions of the system may include:
 
 - Backend API integration
 - MySQL or MongoDB database
-- Student authentication
+- Real student authentication
+- Secure password management
 - Administrator dashboard
 - Course schedule conflict detection
 - Enrollment limits
@@ -577,8 +1054,7 @@ Future versions of the system may include:
 - Advanced reports
 - Database-backed records
 
-
-26. AUTHOR
+Author:
 
 Stephanie Ann D. Jimenez
 
@@ -588,8 +1064,7 @@ Software Engineering 1
 
 Module 9 – Software Evolution
 
-
-27. ACADEMIC PROJECT
+Academic Project:
 
 This project was developed as part of the requirements for Software Engineering 1.
 
