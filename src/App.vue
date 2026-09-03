@@ -2,10 +2,12 @@
 import { ref, computed, onMounted } from 'vue'
 
 import AppHeader from './components/AppHeader.vue'
+import LoginForm from './components/LoginForm.vue'
 import RegistrationForm from './components/RegistrationForm.vue'
 import RegistrationList from './components/RegistrationList.vue'
 
 const registrations = ref([])
+const isLoggedIn = ref(false)
 
 onMounted(() => {
   const saved = localStorage.getItem('module7-records')
@@ -29,6 +31,10 @@ function saveRegistrations() {
     'module7-records',
     JSON.stringify(registrations.value)
   )
+}
+
+function login() {
+  isLoggedIn.value = true
 }
 
 function addRegistration(registration) {
@@ -123,110 +129,120 @@ const totalUnits = computed(() => {
 
 <template>
   <div class="app">
-    <AppHeader />
 
-    <main class="container">
+    <LoginForm
+      v-if="!isLoggedIn"
+      @login="login"
+    />
 
-      <RegistrationForm
-        @register="addRegistration"
-      />
+    <template v-else>
 
-      <RegistrationList
-        :registrations="registrations"
-        @delete="deleteRegistration"
-        @edit="editRegistration"
-      />
+      <AppHeader />
 
-      <section class="stats-grid">
+      <main class="container">
 
-        <div class="stat-card">
-          <div class="stat-icon">
-            📋
-          </div>
+        <RegistrationForm
+          @register="addRegistration"
+        />
 
-          <div class="stat-info">
-            <div class="stat-number">
-              {{ totalCourses }}
+        <RegistrationList
+          :registrations="registrations"
+          @delete="deleteRegistration"
+          @edit="editRegistration"
+        />
+
+        <section class="stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-icon">
+              📋
             </div>
 
-            <div class="stat-label">
-              Total Courses
+            <div class="stat-info">
+              <div class="stat-number">
+                {{ totalCourses }}
+              </div>
+
+              <div class="stat-label">
+                Total Courses
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="stat-card">
-          <div class="stat-icon">
-            ✓
-          </div>
-
-          <div class="stat-info">
-            <div class="stat-number">
-              {{ totalUnits }}
+          <div class="stat-card">
+            <div class="stat-icon">
+              ✓
             </div>
 
-            <div class="stat-label">
-              Total Units
+            <div class="stat-info">
+              <div class="stat-number">
+                {{ totalUnits }}
+              </div>
+
+              <div class="stat-label">
+                Total Units
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="stat-card">
-          <div class="stat-icon">
-            📅
-          </div>
-
-          <div class="stat-info">
-            <div class="stat-term">
-              AY 2026-2027
+          <div class="stat-card">
+            <div class="stat-icon">
+              📅
             </div>
 
-            <div class="stat-label">
-              Current Term
+            <div class="stat-info">
+              <div class="stat-term">
+                AY 2026-2027
+              </div>
+
+              <div class="stat-label">
+                Current Term
+              </div>
             </div>
           </div>
-        </div>
 
-      </section>
+        </section>
 
-      <section class="reminders">
+        <section class="reminders">
 
-        <h3>
-          🔔 Reminders
-        </h3>
+          <h3>
+            🔔 Reminders
+          </h3>
 
-        <ul>
-          <li>
-            Check your schedule for conflicts before registering.
-          </li>
+          <ul>
+            <li>
+              Check your schedule for conflicts before registering.
+            </li>
 
-          <li>
-            Late registration may result in additional fees.
-          </li>
+            <li>
+              Late registration may result in additional fees.
+            </li>
 
-          <li>
-            Contact the registrar for any concerns.
-          </li>
-        </ul>
+            <li>
+              Contact the registrar for any concerns.
+            </li>
+          </ul>
 
-      </section>
+        </section>
 
-    </main>
+      </main>
 
-    <footer class="footer">
+      <footer class="footer">
 
-      <p>
-        © 2026 Course Registration System | All Rights Reserved
-      </p>
+        <p>
+          © 2026 Course Registration System | All Rights Reserved
+        </p>
 
-      <p>
-        Developed by
-        <strong>
-          Stephanie Ann D. Jimenez | BSCS 3A 💙
-        </strong>
-      </p>
+        <p>
+          Developed by
+          <strong>
+            Stephanie Ann D. Jimenez | BSCS 3A 💙
+          </strong>
+        </p>
 
-    </footer>
+      </footer>
+
+    </template>
 
   </div>
 </template>
