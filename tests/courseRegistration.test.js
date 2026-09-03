@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
 
 import RegistrationForm from '../src/components/RegistrationForm.vue'
 import RegistrationList from '../src/components/RegistrationList.vue'
+import LoginForm from '../src/components/LoginForm.vue'
 
 describe('Module 7 Course Registration System - Module 9 Testing', () => {
   const sampleRegistration = {
@@ -188,6 +189,39 @@ describe('Module 7 Course Registration System - Module 9 Testing', () => {
     expect(wrapper.vm.filteredRegistrations[0].status).toBe('Inactive')
     expect(wrapper.vm.filteredRegistrations[0].studentName).toBe(
       'Juan Dela Cruz'
+    )
+
+    wrapper.unmount()
+  })
+
+  it('should allow login with valid institutional credentials', async () => {
+    const wrapper = mount(LoginForm)
+
+    const inputs = wrapper.findAll('input')
+
+    await inputs[0].setValue('stephanie.jimenez@school.edu')
+    await inputs[1].setValue('student123')
+
+    await wrapper.find('form').trigger('submit')
+
+    expect(wrapper.emitted('login')).toBeTruthy()
+
+    wrapper.unmount()
+  })
+
+  it('should reject login with invalid credentials', async () => {
+    const wrapper = mount(LoginForm)
+
+    const inputs = wrapper.findAll('input')
+
+    await inputs[0].setValue('wrong@email.com')
+    await inputs[1].setValue('wrongpassword')
+
+    await wrapper.find('form').trigger('submit')
+
+    expect(wrapper.emitted('login')).toBeFalsy()
+    expect(wrapper.text()).toContain(
+      'Invalid institutional account or password.'
     )
 
     wrapper.unmount()
