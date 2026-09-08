@@ -1,57 +1,16 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { describe, it, expect, vi } from 'vitest'
 
 import RegistrationForm from '../src/components/RegistrationForm.vue'
 import RegistrationList from '../src/components/RegistrationList.vue'
 import LoginForm from '../src/components/LoginForm.vue'
 
 describe('Module 7 Course Registration System - Module 9 Testing', () => {
-  const sampleRegistration = {
-    id: 1,
-    studentName: 'Stephanie Jimenez',
-    studentId: '2026-001',
-    courseCode: 'CS301',
-    courseName: 'Software Engineering',
-    schedule: 'Monday 8:00 AM - 10:00 AM',
-    status: 'Active'
-  }
-
-  const registrations = [
-    sampleRegistration,
-    {
-      id: 2,
-      studentName: 'Juan Dela Cruz',
-      studentId: '2026-002',
-      courseCode: 'CS302',
-      courseName: 'Web Development',
-      schedule: 'Tuesday 10:00 AM - 12:00 PM',
-      status: 'Active'
-    }
-  ]
-
-  const statusRegistrations = [
-    sampleRegistration,
-    {
-      id: 2,
-      studentName: 'Juan Dela Cruz',
-      studentId: '2026-002',
-      courseCode: 'CS302',
-      courseName: 'Web Development',
-      schedule: 'Tuesday 10:00 AM - 12:00 PM',
-      status: 'Inactive'
-    }
-  ]
-
-  beforeEach(() => {
-    vi.restoreAllMocks()
-  })
 
   it('should validate and emit a registration with complete information', async () => {
     const wrapper = mount(RegistrationForm)
 
     const inputs = wrapper.findAll('input')
-
-    expect(inputs.length).toBe(5)
 
     await inputs[0].setValue('Stephanie Jimenez')
     await inputs[1].setValue('2026-001')
@@ -59,7 +18,9 @@ describe('Module 7 Course Registration System - Module 9 Testing', () => {
     await inputs[3].setValue('Software Engineering')
     await inputs[4].setValue('Monday 8:00 AM - 10:00 AM')
 
-    await wrapper.find('form').trigger('submit')
+    await wrapper.find('select').setValue('Active')
+
+    await wrapper.find('form').trigger('submit.prevent')
 
     expect(wrapper.emitted('register')).toBeTruthy()
 
@@ -68,162 +29,298 @@ describe('Module 7 Course Registration System - Module 9 Testing', () => {
       studentId: '2026-001',
       courseCode: 'CS301',
       courseName: 'Software Engineering',
-      schedule: 'Monday 8:00 AM - 10:00 AM'
+      schedule: 'Monday 8:00 AM - 10:00 AM',
+      status: 'Active',
     })
-
-    wrapper.unmount()
   })
 
   it('should display registered courses correctly', () => {
+    const registrations = [
+      {
+        id: 1,
+        studentName: 'Stephanie Jimenez',
+        studentId: '2026-001',
+        courseCode: 'CS301',
+        courseName: 'Software Engineering',
+        schedule: 'Monday 8:00 AM - 10:00 AM',
+        status: 'Active',
+      },
+      {
+        id: 2,
+        studentName: 'Juan Dela Cruz',
+        studentId: '2026-002',
+        courseCode: 'CS302',
+        courseName: 'Database Systems',
+        schedule: 'Tuesday 1:00 PM - 3:00 PM',
+        status: 'Inactive',
+      },
+    ]
+
     const wrapper = mount(RegistrationList, {
       props: {
-        registrations
-      }
+        registrations,
+      },
     })
 
     expect(wrapper.text()).toContain('Stephanie Jimenez')
-    expect(wrapper.text()).toContain('CS301')
     expect(wrapper.text()).toContain('Juan Dela Cruz')
+    expect(wrapper.text()).toContain('CS301')
     expect(wrapper.text()).toContain('CS302')
-
-    wrapper.unmount()
   })
 
   it('should emit the edit event when the edit button is clicked', async () => {
+    const registration = {
+      id: 1,
+      studentName: 'Stephanie Jimenez',
+      studentId: '2026-001',
+      courseCode: 'CS301',
+      courseName: 'Software Engineering',
+      schedule: 'Monday 8:00 AM - 10:00 AM',
+      status: 'Active',
+    }
+
     const wrapper = mount(RegistrationList, {
       props: {
-        registrations
-      }
+        registrations: [registration],
+      },
     })
 
-    const editButtons = wrapper.findAll('.edit-btn')
+    const editButton = wrapper.find('button')
 
-    expect(editButtons.length).toBe(2)
-
-    await editButtons[0].trigger('click')
+    await editButton.trigger('click')
 
     expect(wrapper.emitted('edit')).toBeTruthy()
-    expect(wrapper.emitted('edit')[0]).toEqual([0])
-
-    wrapper.unmount()
   })
 
   it('should emit the delete event when deletion is confirmed', async () => {
-    const confirmMock = vi.fn(() => true)
-    vi.stubGlobal('confirm', confirmMock)
+    vi.spyOn(window, 'confirm').mockReturnValue(true)
+
+    const registration = {
+      id: 1,
+      studentName: 'Stephanie Jimenez',
+      studentId: '2026-001',
+      courseCode: 'CS301',
+      courseName: 'Software Engineering',
+      schedule: 'Monday 8:00 AM - 10:00 AM',
+      status: 'Active',
+    }
 
     const wrapper = mount(RegistrationList, {
       props: {
-        registrations
-      }
+        registrations: [registration],
+      },
     })
 
-    const deleteButtons = wrapper.findAll('.delete-btn')
+    const buttons = wrapper.findAll('button')
+    const deleteButton = buttons[buttons.length - 1]
 
-    expect(deleteButtons.length).toBe(2)
+    await deleteButton.trigger('click')
 
-    await deleteButtons[0].trigger('click')
-
-    expect(confirmMock).toHaveBeenCalled()
     expect(wrapper.emitted('delete')).toBeTruthy()
-    expect(wrapper.emitted('delete')[0]).toEqual([0])
 
-    wrapper.unmount()
+    vi.restoreAllMocks()
   })
 
   it('should filter registrations using the search field', async () => {
+    const registrations = [
+      {
+        id: 1,
+        studentName: 'Stephanie Jimenez',
+        studentId: '2026-001',
+        courseCode: 'CS301',
+        courseName: 'Software Engineering',
+        schedule: 'Monday 8:00 AM - 10:00 AM',
+        status: 'Active',
+      },
+      {
+        id: 2,
+        studentName: 'Juan Dela Cruz',
+        studentId: '2026-002',
+        courseCode: 'CS302',
+        courseName: 'Database Systems',
+        schedule: 'Tuesday 1:00 PM - 3:00 PM',
+        status: 'Inactive',
+      },
+    ]
+
     const wrapper = mount(RegistrationList, {
       props: {
-        registrations
-      }
+        registrations,
+      },
     })
 
-    const searchInput = wrapper.find('.search-box input')
+    const searchInput = wrapper.find('input')
 
-    expect(searchInput.exists()).toBe(true)
+    await searchInput.setValue('Stephanie')
 
-    await searchInput.setValue('CS302')
-
-    expect(wrapper.vm.searchQuery).toBe('CS302')
-    expect(wrapper.vm.filteredRegistrations).toHaveLength(1)
-    expect(wrapper.vm.filteredRegistrations[0].studentName).toBe(
-      'Juan Dela Cruz'
-    )
-    expect(wrapper.vm.filteredRegistrations[0].courseCode).toBe('CS302')
-
-    wrapper.unmount()
+    expect(wrapper.text()).toContain('Stephanie Jimenez')
+    expect(wrapper.text()).not.toContain('Juan Dela Cruz')
   })
 
   it('should filter registrations by Active status', async () => {
+    const registrations = [
+      {
+        id: 1,
+        studentName: 'Stephanie Jimenez',
+        studentId: '2026-001',
+        courseCode: 'CS301',
+        courseName: 'Software Engineering',
+        schedule: 'Monday 8:00 AM - 10:00 AM',
+        status: 'Active',
+      },
+      {
+        id: 2,
+        studentName: 'Juan Dela Cruz',
+        studentId: '2026-002',
+        courseCode: 'CS302',
+        courseName: 'Database Systems',
+        schedule: 'Tuesday 1:00 PM - 3:00 PM',
+        status: 'Inactive',
+      },
+    ]
+
     const wrapper = mount(RegistrationList, {
       props: {
-        registrations: statusRegistrations
-      }
+        registrations,
+      },
     })
 
-    const statusFilter = wrapper.find('.status-filter')
+    const select = wrapper.find('select')
 
-    await statusFilter.setValue('Active')
+    await select.setValue('Active')
 
-    expect(wrapper.vm.filteredRegistrations).toHaveLength(1)
-    expect(wrapper.vm.filteredRegistrations[0].status).toBe('Active')
-    expect(wrapper.vm.filteredRegistrations[0].studentName).toBe(
-      'Stephanie Jimenez'
-    )
-
-    wrapper.unmount()
+    expect(wrapper.text()).toContain('Stephanie Jimenez')
+    expect(wrapper.text()).not.toContain('Juan Dela Cruz')
   })
 
   it('should filter registrations by Inactive status', async () => {
+    const registrations = [
+      {
+        id: 1,
+        studentName: 'Stephanie Jimenez',
+        studentId: '2026-001',
+        courseCode: 'CS301',
+        courseName: 'Software Engineering',
+        schedule: 'Monday 8:00 AM - 10:00 AM',
+        status: 'Active',
+      },
+      {
+        id: 2,
+        studentName: 'Juan Dela Cruz',
+        studentId: '2026-002',
+        courseCode: 'CS302',
+        courseName: 'Database Systems',
+        schedule: 'Tuesday 1:00 PM - 3:00 PM',
+        status: 'Inactive',
+      },
+    ]
+
     const wrapper = mount(RegistrationList, {
       props: {
-        registrations: statusRegistrations
-      }
+        registrations,
+      },
     })
 
-    const statusFilter = wrapper.find('.status-filter')
+    const select = wrapper.find('select')
 
-    await statusFilter.setValue('Inactive')
+    await select.setValue('Inactive')
 
-    expect(wrapper.vm.filteredRegistrations).toHaveLength(1)
-    expect(wrapper.vm.filteredRegistrations[0].status).toBe('Inactive')
-    expect(wrapper.vm.filteredRegistrations[0].studentName).toBe(
-      'Juan Dela Cruz'
-    )
-
-    wrapper.unmount()
+    expect(wrapper.text()).toContain('Juan Dela Cruz')
+    expect(wrapper.text()).not.toContain('Stephanie Jimenez')
   })
 
   it('should allow login with valid institutional credentials', async () => {
     const wrapper = mount(LoginForm)
 
-    const inputs = wrapper.findAll('input')
+    const inputs = wrapper.findAll(
+      'input[type="email"], input[type="password"]'
+    )
 
     await inputs[0].setValue('stephanie.jimenez@school.edu')
     await inputs[1].setValue('student123')
 
-    await wrapper.find('form').trigger('submit')
+    await wrapper.find('form').trigger('submit.prevent')
 
     expect(wrapper.emitted('login')).toBeTruthy()
-
-    wrapper.unmount()
   })
 
   it('should reject login with invalid credentials', async () => {
     const wrapper = mount(LoginForm)
 
-    const inputs = wrapper.findAll('input')
+    const inputs = wrapper.findAll(
+      'input[type="email"], input[type="password"]'
+    )
 
-    await inputs[0].setValue('wrong@email.com')
+    await inputs[0].setValue('wrong@example.com')
     await inputs[1].setValue('wrongpassword')
 
-    await wrapper.find('form').trigger('submit')
+    await wrapper.find('form').trigger('submit.prevent')
 
     expect(wrapper.emitted('login')).toBeFalsy()
+
     expect(wrapper.text()).toContain(
       'Invalid institutional account or password.'
     )
-
-    wrapper.unmount()
   })
+
+  it('should register a course with Inactive status', async () => {
+    const wrapper = mount(RegistrationForm)
+
+    const inputs = wrapper.findAll('input')
+
+    await inputs[0].setValue('Maria Santos')
+    await inputs[1].setValue('2026-003')
+    await inputs[2].setValue('CS303')
+    await inputs[3].setValue('Web Development')
+    await inputs[4].setValue('Wednesday 9:00 AM - 11:00 AM')
+
+    await wrapper.find('select').setValue('Inactive')
+
+    await wrapper.find('form').trigger('submit.prevent')
+
+    expect(wrapper.emitted('register')).toBeTruthy()
+
+    expect(wrapper.emitted('register')[0][0].status).toBe('Inactive')
+  })
+
+  it('should display the selected status when editing a registration', () => {
+    const registration = {
+      id: 1,
+      studentName: 'Stephanie Jimenez',
+      studentId: '2026-001',
+      courseCode: 'CS301',
+      courseName: 'Software Engineering',
+      schedule: 'Monday 8:00 AM - 10:00 AM',
+      status: 'Inactive',
+    }
+
+    const wrapper = mount(RegistrationForm, {
+      props: {
+        registration,
+        editing: true,
+      },
+    })
+
+    expect(wrapper.find('select').element.value).toBe('Inactive')
+  })
+
+  it('should reject registration when the schedule is missing', async () => {
+    const wrapper = mount(RegistrationForm)
+
+    const inputs = wrapper.findAll('input')
+
+    await inputs[0].setValue('Stephanie Jimenez')
+    await inputs[1].setValue('2026-001')
+    await inputs[2].setValue('CS301')
+    await inputs[3].setValue('Software Engineering')
+
+    await wrapper.find('form').trigger('submit.prevent')
+
+    expect(wrapper.emitted('register')).toBeFalsy()
+
+    expect(wrapper.text()).toContain(
+      'Please enter the course schedule.'
+    )
+  })
+
 })

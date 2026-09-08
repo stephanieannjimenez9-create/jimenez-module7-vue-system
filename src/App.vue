@@ -41,7 +41,7 @@ function addRegistration(registration) {
   registrations.value.push({
     id: Date.now(),
     ...registration,
-    status: 'Active'
+    status: registration.status
   })
 
   saveRegistrations()
@@ -110,7 +110,8 @@ function editRegistration(index) {
     studentId: studentId.trim(),
     courseCode: courseCode.trim(),
     courseName: courseName.trim(),
-    schedule: schedule.trim()
+    schedule: schedule.trim(),
+    status: registration.status
   }
 
   saveRegistrations()

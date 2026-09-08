@@ -19,6 +19,7 @@ const studentId = ref('')
 const courseCode = ref('')
 const courseName = ref('')
 const schedule = ref('')
+const status = ref('Active')
 const errorMessage = ref('')
 
 watch(
@@ -30,6 +31,7 @@ watch(
       courseCode.value = value.courseCode || ''
       courseName.value = value.courseName || ''
       schedule.value = value.schedule || ''
+      status.value = value.status === 'Inactive' ? 'Inactive' : 'Active'
       errorMessage.value = ''
     }
   },
@@ -44,7 +46,8 @@ function submitRegistration() {
     studentId: studentId.value.trim(),
     courseCode: courseCode.value.trim(),
     courseName: courseName.value.trim(),
-    schedule: schedule.value.trim()
+    schedule: schedule.value.trim(),
+    status: status.value
   }
 
   if (!registration.studentName) {
@@ -83,6 +86,7 @@ function clearForm() {
   courseCode.value = ''
   courseName.value = ''
   schedule.value = ''
+  status.value = 'Active'
   errorMessage.value = ''
 }
 </script>
@@ -112,6 +116,7 @@ function clearForm() {
 
       <div class="form-grid">
 
+        <!-- Student Name -->
         <div class="form-group">
           <label>Student Name</label>
 
@@ -123,6 +128,7 @@ function clearForm() {
           />
         </div>
 
+        <!-- Student ID -->
         <div class="form-group">
           <label>Student ID</label>
 
@@ -134,6 +140,7 @@ function clearForm() {
           />
         </div>
 
+        <!-- Course Code -->
         <div class="form-group">
           <label>Course Code</label>
 
@@ -145,6 +152,7 @@ function clearForm() {
           />
         </div>
 
+        <!-- Course Name -->
         <div class="form-group">
           <label>Course Name</label>
 
@@ -156,6 +164,7 @@ function clearForm() {
           />
         </div>
 
+        <!-- Schedule -->
         <div class="form-group full">
           <label>Schedule</label>
 
@@ -165,6 +174,16 @@ function clearForm() {
             :value="schedule"
             @input="schedule = $event.target.value"
           />
+        </div>
+
+        <!-- Status -->
+        <div class="form-group">
+          <label>Status</label>
+
+          <select v-model="status" class="status-select">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
         </div>
 
       </div>
@@ -193,3 +212,24 @@ function clearForm() {
 
   </section>
 </template>
+
+<style scoped>
+.status-select {
+  width: 100%;
+  height: 58px;
+  padding: 0 18px;
+  border: 2px solid #ddd6fe;
+  border-radius: 12px;
+  background-color: #faf9ff;
+  color: #6b7280;
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.status-select:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+</style>
